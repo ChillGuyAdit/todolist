@@ -23,6 +23,7 @@ class _onBoardingState extends State<onBoarding> {
             Text(
               'Sederhanakan, Atur, dan',
               style: TextStyle(
+                fontFamily: 'Roboto',
                 fontWeight: FontWeight.bold,
                 color: AppColor().hitam,
                 fontSize: 30,
@@ -34,6 +35,7 @@ class _onBoardingState extends State<onBoarding> {
                 Text(
                   'Kuasai',
                   style: TextStyle(
+                    fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: AppColor().hitam,
                     fontSize: 30,
@@ -43,6 +45,7 @@ class _onBoardingState extends State<onBoarding> {
                 Text(
                   'Hari Kamu',
                   style: TextStyle(
+                    fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
                     color: AppColor().primer,

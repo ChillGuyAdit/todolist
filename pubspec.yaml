@@ -33,7 +33,10 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
-  # fonts:
+  fonts:
+    - family : Roboto
+      fonts :
+        - asset: font/Roboto.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
