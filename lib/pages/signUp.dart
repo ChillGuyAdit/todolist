@@ -28,6 +28,9 @@ class _signUpState extends State<signUp> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColor().putih,
       body: Stack(
@@ -111,7 +114,7 @@ class _signUpState extends State<signUp> {
                   key: _globalKey1,
                   child: TextFormField(
                     controller: _simpenPassword,
-                    obscureText: _passwordd ? !_cekIcon : _cekIcon,
+                    obscureText: _passwordd ? _cekIcon : !_cekIcon,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -204,7 +207,7 @@ class _signUpState extends State<signUp> {
           ),
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 15),
+              padding: EdgeInsets.only(bottom: 25),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Column(
@@ -213,9 +216,9 @@ class _signUpState extends State<signUp> {
                     Container(
                       height: 1,
                       width: double.infinity,
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.grey.withOpacity(0.8),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 35),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
