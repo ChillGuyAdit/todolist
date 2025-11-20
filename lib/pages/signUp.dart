@@ -19,12 +19,26 @@ class _signUpState extends State<signUp> {
   final TextEditingController _simpenEmail = TextEditingController();
   final TextEditingController _simpenPassword = TextEditingController();
 
-  final emailRules = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+  final emailRules = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
 
   final passwordRules = RegExp(r'^[a-zA-Z][A-Za-z0-9]{8,12}$');
 
+  final FocusNode _userNameNode = FocusNode();
+  final FocusNode _userEmailNode = FocusNode();
+  final FocusNode _userPasswordNode = FocusNode();
+
+  void dispose() {
+    _userNameNode.dispose();
+    _userEmailNode.dispose();
+    _userPasswordNode.dispose();
+    _simpenUsenName.dispose();
+    _simpenEmail.dispose();
+    _simpenPassword.dispose();
+    super.dispose();
+  }
+
+  bool _password = false;
   bool _cekIcon = false;
-  bool _passwordd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +97,30 @@ class _signUpState extends State<signUp> {
                   ),
                 ),
                 SizedBox(height: 10),
-                data(),
+                Form(
+                  key: _globalKey1,
+                  child: TextFormField(
+                    controller: _simpenUsenName,
+                    focusNode: _userNameNode,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nama tidak boleh kosong';
+                      }
+                    },
+                    onFieldSubmitted: (value) {
+                      if (_globalKey1.currentState!.validate()) {
+                        FocusScope.of(context).requestFocus(_userEmailNode);
+                      } else {
+                        FocusScope.of(context).requestFocus(_userNameNode);
+                      }
+                    },
+                  ),
+                ),
                 SizedBox(height: 35),
                 Align(
                   alignment: Alignment.topLeft,
@@ -98,7 +135,32 @@ class _signUpState extends State<signUp> {
                   ),
                 ),
                 SizedBox(height: 10),
-                data(),
+                Form(
+                  key: _globalKey2,
+                  child: TextFormField(
+                    controller: _simpenEmail,
+                    focusNode: _userEmailNode,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Email tidak boleh kosong';
+                      } else if (!emailRules.hasMatch(value)) {
+                        return 'Email tidak valid';
+                      }
+                    },
+                    onFieldSubmitted: (value) {
+                      if (_globalKey2.currentState!.validate()) {
+                        FocusScope.of(context).requestFocus(_userPasswordNode);
+                      } else {
+                        FocusScope.of(context).requestFocus(_userEmailNode);
+                      }
+                    },
+                  ),
+                ),
                 SizedBox(height: 35),
                 Align(
                   alignment: Alignment.topLeft,
@@ -111,10 +173,11 @@ class _signUpState extends State<signUp> {
                 ),
                 SizedBox(height: 10),
                 Form(
-                  key: _globalKey1,
+                  key: _globalKey3,
                   child: TextFormField(
                     controller: _simpenPassword,
-                    obscureText: _passwordd ? _cekIcon : !_cekIcon,
+                    focusNode: _userPasswordNode,
+                    obscureText: _password ? _cekIcon : !_cekIcon,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -130,9 +193,23 @@ class _signUpState extends State<signUp> {
                         },
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password tidak boleh kosong';
+                      } else if (!passwordRules.hasMatch(value)) {
+                        return 'Email tidak valid';
+                      }
+                    },
+                    onFieldSubmitted: (value) {
+                      if (_globalKey3.currentState!.validate()) {
+                        FocusScope.of(context).unfocus();
+                      } else {
+                        FocusScope.of(context).requestFocus(_userPasswordNode);
+                      }
+                    },
                   ),
                 ),
-                SizedBox(height: 80),
+                SizedBox(height: 35),
                 Align(
                   alignment: Alignment.center,
                   child: Form(
@@ -148,10 +225,30 @@ class _signUpState extends State<signUp> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => categories()),
-                        );
+                        bool validUserName = _globalKey1.currentState!
+                            .validate();
+                        bool validEmail = _globalKey2.currentState!.validate();
+                        bool validPassword = _globalKey3.currentState!
+                            .validate();
+
+                        if (validUserName && validEmail && validPassword) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => categories(),
+                            ),
+                          );
+                        } else {
+                          if (!validUserName) {
+                            FocusScope.of(context).requestFocus(_userNameNode);
+                          } else if (!validEmail) {
+                            FocusScope.of(context).requestFocus(_userEmailNode);
+                          } else if (!validPassword) {
+                            FocusScope.of(
+                              context,
+                            ).requestFocus(_userPasswordNode);
+                          }
+                        }
                       },
                       child: Text(
                         'Sign Up',
@@ -165,7 +262,7 @@ class _signUpState extends State<signUp> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 0),
                 Align(
                   alignment: Alignment.center,
                   child: Row(
@@ -193,7 +290,7 @@ class _signUpState extends State<signUp> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 0),
                 Text(
                   'OR',
                   style: TextStyle(
@@ -248,18 +345,5 @@ class image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(gambar, width: 45, height: 45);
-  }
-}
-
-class data extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      child: TextFormField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        ),
-      ),
-    );
   }
 }

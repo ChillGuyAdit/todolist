@@ -208,12 +208,30 @@ class _LoginState extends State<Login> {
                                 backgroundColor: AppColor().primer,
                               ),
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => categories(),
-                                  ),
-                                );
+                                // validasi kedua form
+                                bool validEmail = globalKey1.currentState!
+                                    .validate();
+                                bool validPassword = globalKey2.currentState!
+                                    .validate();
+
+                                if (validEmail && validPassword) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => categories(),
+                                    ),
+                                  );
+                                } else {
+                                  if (!validEmail) {
+                                    FocusScope.of(
+                                      context,
+                                    ).requestFocus(_focusEmail);
+                                  } else if (!validPassword) {
+                                    FocusScope.of(
+                                      context,
+                                    ).requestFocus(_focusPassword);
+                                  }
+                                }
                               },
                             ),
                             SizedBox(height: 15),
@@ -250,7 +268,7 @@ class _LoginState extends State<Login> {
                               'OR',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
-                                fontSize: 25,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
